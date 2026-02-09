@@ -159,6 +159,10 @@ export async function resolveBrowserOpenCommand(): Promise<BrowserOpenCommand> {
       if (hasWslview) {
         return { argv: ["wslview"], command: "wslview" };
       }
+      const hasExplorer = await detectBinary("explorer.exe");
+      if (hasExplorer) {
+        return { argv: ["explorer.exe"], command: "explorer.exe" };
+      }
       if (!hasDisplay) {
         return { argv: null, reason: "wsl-no-wslview" };
       }
@@ -240,6 +244,36 @@ export async function openUrl(url: string): Promise<boolean> {
     return true;
   } catch {
     // ignore; we still print the URL for manual open
+    return false;
+  }
+}
+
+export async function openPath(pathname: string): Promise<boolean> {
+  if (shouldSkipBrowserOpenInTests()) {
+    return false;
+  }
+  const resolved = await resolveBrowserOpenCommand();
+  if (!resolved.argv) {
+    return false;
+  }
+  const quotePath = resolved.quoteUrl === true;
+  const command = [...resolved.argv];
+  if (quotePath) {
+    if (command.at(-1) === "") {
+      // Preserve the empty title token for `start` when using verbatim args.
+      command[command.length - 1] = '""';
+    }
+    command.push(`"${pathname}"`);
+  } else {
+    command.push(pathname);
+  }
+  try {
+    await runCommandWithTimeout(command, {
+      timeoutMs: 5_000,
+      windowsVerbatimArguments: quotePath,
+    });
+    return true;
+  } catch {
     return false;
   }
 }

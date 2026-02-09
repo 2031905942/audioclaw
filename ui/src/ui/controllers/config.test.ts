@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   applyConfigSnapshot,
   applyConfig,
+  openConfigDir,
   runUpdate,
   updateConfigFormValue,
   type ConfigState,
@@ -172,5 +173,18 @@ describe("runUpdate", () => {
     expect(request).toHaveBeenCalledWith("update.run", {
       sessionKey: "agent:main:whatsapp:dm:+15555550123",
     });
+  });
+});
+
+describe("openConfigDir", () => {
+  it("requests config.openDir", async () => {
+    const request = vi.fn().mockResolvedValue({});
+    const state = createState();
+    state.connected = true;
+    state.client = { request } as unknown as ConfigState["client"];
+
+    await openConfigDir(state);
+
+    expect(request).toHaveBeenCalledWith("config.openDir", {});
   });
 });

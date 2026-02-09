@@ -1,0 +1,14 @@
+{
+  "name": "@openclaw/game-audio",
+  "version": "2026.2.4",
+  "description": "OpenClaw read-only game audio analysis tools (requirements/Wwise/Unity).",
+  "type": "module",
+  "devDependencies": {
+    "openclaw": "workspace:*"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

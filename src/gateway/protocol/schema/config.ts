@@ -35,6 +35,8 @@ export const ConfigPatchParamsSchema = Type.Object(
 
 export const ConfigSchemaParamsSchema = Type.Object({}, { additionalProperties: false });
 
+export const ConfigOpenDirParamsSchema = Type.Object({}, { additionalProperties: false });
+
 export const UpdateRunParamsSchema = Type.Object(
   {
     sessionKey: Type.Optional(Type.String()),

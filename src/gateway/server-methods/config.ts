@@ -1,6 +1,9 @@
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import type { GatewayRequestHandlers, RespondFn } from "./types.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { listChannelPlugins } from "../../channels/plugins/index.js";
+import { openPath } from "../../commands/onboard-helpers.js";
 import {
   CONFIG_PATH,
   loadConfig,
@@ -31,6 +34,7 @@ import {
   formatValidationErrors,
   validateConfigApplyParams,
   validateConfigGetParams,
+  validateConfigOpenDirParams,
   validateConfigPatchParams,
   validateConfigSchemaParams,
   validateConfigSetParams,
@@ -456,5 +460,41 @@ export const configHandlers: GatewayRequestHandlers = {
       },
       undefined,
     );
+  },
+  "config.openDir": async ({ params, respond }) => {
+    if (!validateConfigOpenDirParams(params)) {
+      respond(
+        false,
+        undefined,
+        errorShape(
+          ErrorCodes.INVALID_REQUEST,
+          `invalid config.openDir params: ${formatValidationErrors(validateConfigOpenDirParams.errors)}`,
+        ),
+      );
+      return;
+    }
+
+    const dir = path.dirname(CONFIG_PATH);
+    try {
+      await fs.mkdir(dir, { recursive: true, mode: 0o700 });
+    } catch {
+      // best-effort; opening might still work
+    }
+
+    const opened = await openPath(dir);
+    if (!opened) {
+      respond(
+        false,
+        undefined,
+        errorShape(
+          ErrorCodes.INTERNAL_ERROR,
+          "Failed to open config directory (no GUI available or open command missing).",
+          { details: { dir } },
+        ),
+      );
+      return;
+    }
+
+    respond(true, { ok: true, dir, path: CONFIG_PATH }, undefined);
   },
 };

@@ -44,6 +44,7 @@ import type {
 import type {
   ConfigApplyParamsSchema,
   ConfigGetParamsSchema,
+  ConfigOpenDirParamsSchema,
   ConfigPatchParamsSchema,
   ConfigSchemaParamsSchema,
   ConfigSchemaResponseSchema,
@@ -170,6 +171,7 @@ export type ConfigSetParams = Static<typeof ConfigSetParamsSchema>;
 export type ConfigApplyParams = Static<typeof ConfigApplyParamsSchema>;
 export type ConfigPatchParams = Static<typeof ConfigPatchParamsSchema>;
 export type ConfigSchemaParams = Static<typeof ConfigSchemaParamsSchema>;
+export type ConfigOpenDirParams = Static<typeof ConfigOpenDirParamsSchema>;
 export type ConfigSchemaResponse = Static<typeof ConfigSchemaResponseSchema>;
 export type WizardStartParams = Static<typeof WizardStartParamsSchema>;
 export type WizardNextParams = Static<typeof WizardNextParamsSchema>;

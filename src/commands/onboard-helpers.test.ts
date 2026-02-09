@@ -15,6 +15,7 @@ const mocks = vi.hoisted(() => ({
     killed: false,
   })),
   pickPrimaryTailnetIPv4: vi.fn(() => undefined),
+  isWSL: vi.fn(async () => false),
 }));
 
 vi.mock("../process/exec.js", () => ({
@@ -23,6 +24,10 @@ vi.mock("../process/exec.js", () => ({
 
 vi.mock("../infra/tailnet.js", () => ({
   pickPrimaryTailnetIPv4: mocks.pickPrimaryTailnetIPv4,
+}));
+
+vi.mock("../infra/wsl.js", () => ({
+  isWSL: mocks.isWSL,
 }));
 
 afterEach(() => {
@@ -62,6 +67,40 @@ describe("resolveBrowserOpenCommand", () => {
     const resolved = await resolveBrowserOpenCommand();
     expect(resolved.argv).toEqual(["cmd", "/c", "start", ""]);
     expect(resolved.quoteUrl).toBe(true);
+    platformSpy.mockRestore();
+  });
+
+  it("falls back to explorer.exe under WSL without a display", async () => {
+    const platformSpy = vi.spyOn(process, "platform", "get").mockReturnValue("linux");
+    mocks.isWSL.mockResolvedValueOnce(true);
+    vi.stubEnv("DISPLAY", "");
+    vi.stubEnv("WAYLAND_DISPLAY", "");
+
+    mocks.runCommandWithTimeout.mockImplementationOnce(async (argv: string[]) => {
+      // which wslview
+      if (argv.join(" ").includes("which wslview")) {
+        return { stdout: "", stderr: "", code: 1, signal: null, killed: false };
+      }
+      return { stdout: "", stderr: "", code: 1, signal: null, killed: false };
+    });
+    mocks.runCommandWithTimeout.mockImplementationOnce(async (argv: string[]) => {
+      // which explorer.exe
+      if (argv.join(" ").includes("which explorer.exe")) {
+        return {
+          stdout: "/mnt/c/Windows/explorer.exe\n",
+          stderr: "",
+          code: 0,
+          signal: null,
+          killed: false,
+        };
+      }
+      return { stdout: "", stderr: "", code: 1, signal: null, killed: false };
+    });
+
+    const resolved = await resolveBrowserOpenCommand();
+    expect(resolved.argv).toEqual(["explorer.exe"]);
+    expect(resolved.command).toBe("explorer.exe");
+
     platformSpy.mockRestore();
   });
 });

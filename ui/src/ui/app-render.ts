@@ -1,5 +1,6 @@
 import { html, nothing } from "lit";
 import type { AppViewState } from "./app-view-state.ts";
+import type { OpenClawApp } from "./app.ts";
 import type { UsageState } from "./controllers/usage.ts";
 import { parseAgentSessionKey } from "../../../src/routing/session-key.js";
 import { refreshChatAvatar } from "./app-chat.ts";
@@ -13,6 +14,7 @@ import { loadChatHistory } from "./controllers/chat.ts";
 import {
   applyConfig,
   loadConfig,
+  openConfigDir,
   runUpdate,
   saveConfig,
   updateConfigFormValue,
@@ -1162,11 +1164,13 @@ export function renderApp(state: AppViewState) {
                   state.configActiveSection = section;
                   state.configActiveSubsection = null;
                 },
-                onSubsectionChange: (section) => (state.configActiveSubsection = section),
-                onReload: () => loadConfig(state),
-                onSave: () => saveConfig(state),
-                onApply: () => applyConfig(state),
-                onUpdate: () => runUpdate(state),
+                onSubsectionChange: (section) =>
+                  ((state as unknown as OpenClawApp).configActiveSubsection = section),
+                onReload: () => loadConfig(state as unknown as OpenClawApp),
+                onSave: () => saveConfig(state as unknown as OpenClawApp),
+                onApply: () => applyConfig(state as unknown as OpenClawApp),
+                onUpdate: () => runUpdate(state as unknown as OpenClawApp),
+                onOpenDir: () => openConfigDir(state as unknown as OpenClawApp),
               })
             : nothing
         }

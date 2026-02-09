@@ -32,6 +32,7 @@ export type ConfigProps = {
   onSave: () => void;
   onApply: () => void;
   onUpdate: () => void;
+  onOpenDir: () => void;
 };
 
 // SVG Icons for sidebar (Lucide-style)
@@ -443,6 +444,7 @@ export function renderConfig(props: ConfigProps) {
     hasChanges &&
     (props.formMode === "raw" ? true : canSaveForm);
   const canUpdate = props.connected && !props.applying && !props.updating;
+  const canOpenDir = props.connected;
 
   return html`
     <div class="config-layout">
@@ -584,6 +586,14 @@ export function renderConfig(props: ConfigProps) {
               @click=${props.onUpdate}
             >
               ${props.updating ? "Updating…" : "Update"}
+            </button>
+            <button
+              class="btn btn--sm"
+              ?disabled=${!canOpenDir}
+              @click=${props.onOpenDir}
+              title="Open config directory"
+            >
+              Open
             </button>
           </div>
         </div>

@@ -1,0 +1,63 @@
+{
+  "id": "game-audio",
+  "name": "Game Audio",
+  "description": "Read-only tools for searching requirements, Wwise projects, and Unity projects.",
+  "skills": ["./skills"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "roots": {
+        "type": "array",
+        "description": "Allowed root directories the audio tools can read.",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Stable root id (e.g. requirements, wwise, unity)."
+            },
+            "path": {
+              "type": "string",
+              "description": "Absolute path (recommended) or workspace-relative path."
+            },
+            "kind": {
+              "type": "string",
+              "description": "Optional hint: requirements | wwise | unity | other."
+            },
+            "exclude": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Per-root exclude patterns (substring match on normalized paths)."
+            }
+          },
+          "required": ["id", "path"]
+        }
+      },
+      "maxFileBytes": {
+        "type": "number",
+        "description": "Max bytes read from any one file (default 2000000)."
+      },
+      "maxHits": {
+        "type": "number",
+        "description": "Max total matches returned per search (default 200)."
+      },
+      "followSymlinks": {
+        "type": "boolean",
+        "description": "If true, follow symlinks during traversal (default false)."
+      },
+      "exclude": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Global exclude patterns (substring match on normalized paths)."
+      },
+      "includeExtensions": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "If set, only read files with these extensions (e.g. .cs, .wwu, .xml)."
+      }
+    },
+    "required": ["roots"]
+  }
+}

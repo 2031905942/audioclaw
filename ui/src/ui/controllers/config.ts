@@ -172,6 +172,18 @@ export async function runUpdate(state: ConfigState) {
   }
 }
 
+export async function openConfigDir(state: ConfigState) {
+  if (!state.client || !state.connected) {
+    return;
+  }
+  state.lastError = null;
+  try {
+    await state.client.request("config.openDir", {});
+  } catch (err) {
+    state.lastError = String(err);
+  }
+}
+
 export function updateConfigFormValue(
   state: ConfigState,
   path: Array<string | number>,

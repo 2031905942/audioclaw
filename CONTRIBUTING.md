@@ -1,14 +1,23 @@
-# Contributing to OpenClaw
+# Contributing（本仓库为非官方 Fork）
 
-Welcome to the lobster tank! 🦞
+> 重要提示：本仓库是 OpenClaw 的非官方 Fork/派生版本。
+>
+> - 上游（官方）仓库：https://github.com/openclaw/openclaw
+> - 上游维护者/Discord 等官方渠道 **不负责** 处理本仓库的问题。
+> - 如果问题只与上游 OpenClaw 有关（并且你能在上游复现），请到上游仓库提交 Issue/PR。
+> - 如果问题与本仓库的改动有关，请在本仓库提交 Issue/PR。
+
+下面内容多数来自上游贡献指南，已尽量保留以便对齐开发流程。
 
 ## Quick Links
 
-- **GitHub:** https://github.com/openclaw/openclaw
+- **Upstream GitHub (official):** https://github.com/openclaw/openclaw
 - **Discord:** https://discord.gg/qkhbAGHRBT
 - **X/Twitter:** [@steipete](https://x.com/steipete) / [@openclaw](https://x.com/openclaw)
 
-## Maintainers
+## Upstream Maintainers（上游维护者）
+
+以下是上游 OpenClaw 的维护者信息（用于追溯与致谢）。他们不负责本 fork 的问题排查与支持。
 
 - **Peter Steinberger** - Benevolent Dictator
   - GitHub: [@steipete](https://github.com/steipete) · X: [@steipete](https://x.com/steipete)

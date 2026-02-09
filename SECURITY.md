@@ -1,6 +1,12 @@
 # Security Policy
 
-If you believe you've found a security issue in OpenClaw, please report it privately.
+> 重要提示：本仓库是 OpenClaw 的非官方 Fork/派生版本。
+>
+> - 上游（官方）仓库：https://github.com/openclaw/openclaw
+> - 若你发现的问题在上游也存在，请按上游的安全流程报告。
+> - 若问题仅由本仓库的改动引入，请在本仓库使用 GitHub 的 Security Advisory（或提交 Issue，并避免公开敏感细节）。
+
+If you believe you've found a security issue in OpenClaw (upstream), please report it privately.
 
 ## Reporting
 
